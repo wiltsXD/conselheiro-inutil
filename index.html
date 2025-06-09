@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Conselheiro Inútil Dinâmico</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #222;
+    color: #fff;
+    transition: background-color 0.7s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #container {
+    max-width: 700px;
+    padding: 20px;
+    text-align: center;
+  }
+  #conselho {
+    font-size: 2rem;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 10px;
+    padding: 0 15px;
+  }
+  button {
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    margin: 10px 5px;
+    border-radius: 6px;
+    border: none;
+    background: #fff;
+    color: #222;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background: #ddd;
+  }
+  #versaoEscolha {
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div id="container">
+
+  <div id="versaoEscolha">
+    <button id="livreBtn">Versão Livre</button>
+    <button id="adultaBtn">Versão Adulta</button>
+  </div>
+
+  <div id="conselho" style="display:none;"></div>
+  <button id="novoConselhoBtn" style="display:none;">Novo conselho</button>
+
+</div>
+
+<script>
+  const coresFundo = [
+    '#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1', '#5f27cd', 
+    '#54a0ff', '#00d2d3', '#576574', '#c8d6e5', '#ff9ff3'
+  ];
+
+  // Estrutura para montar frases coerentes e engraçadas
+
+  const livres = {
+    inicio: [
+      "Se você está com preguiça,", 
+      "Quando a fome bater,", 
+      "Nunca esqueça que", 
+      "Se alguém te chamar para trabalhar,", 
+      "Antes de dormir,", 
+      "No meio da semana,", 
+      "Quando a vida parecer difícil,", 
+      "Se a TV estiver ruim,", 
+      "Para evitar problemas,", 
+      "Quando o dia estiver chato,"
+    ],
+    meio: [
+      "comer pizza é sempre uma boa ideia", 
+      "uma soneca de 5 minutos salva", 
+      "responder com gifs é a melhor solução", 
+      "fingir que está ocupado ajuda bastante", 
+      "sonhar com férias é essencial", 
+      "beber água e reclamar menos ajuda", 
+      "rir das próprias piadas é obrigatório", 
+      "ligar para um amigo faz milagres", 
+      "usar meias coloridas melhora o humor", 
+      "dar uma volta no quarteirão renova a mente"
+    ],
+    fim: [
+      ".", 
+      ", mesmo que a pizza acabe rápido.", 
+      ", afinal, ninguém te vê pelo chat.", 
+      ", pelo menos por enquanto.", 
+      ", mesmo que só na cabeça.", 
+      ", mas não esqueça o café.", 
+      ", isso faz você parecer normal.", 
+      ", ou pelo menos tentar.", 
+      ", e ninguém vai te julgar.", 
+      ", é simples e funciona."
+    ]
+  };
+
+  const adultos = {
+    inicio: [
+      "Se a vida te fuder hoje,", 
+      "Quando o chefe pisar no seu calo,", 
+      "Se a ressaca apertar,", 
+      "Antes de mandar todo mundo à merda,", 
+      "Se você esquecer de pagar as contas,", 
+      "Quando quiser sumir do mundo,", 
+      "Se o barulho do trânsito te irritar,", 
+      "Quando alguém te encher o saco,", 
+      "Se a ansiedade bater forte,", 
+      "Quando tudo der errado,"
+    ],
+    meio: [
+      "beba mais uma cerveja e finja que resolve", 
+      "dê um sorriso irônico e conte até dez", 
+      "coma um hambúrguer e chore depois", 
+      "lembre que ninguém realmente se importa", 
+      "diga que o boleto é só um detalhe", 
+      "fique em silêncio e pense em memes", 
+      "grite no travesseiro, ninguém vai ouvir", 
+      "ignore e vá dormir cedo", 
+      "faça uma piada ruim para distrair", 
+      "reze para o universo te dar um tempo"
+    ],
+    fim: [
+      ".", 
+      ", mas amanhã a merda volta.", 
+      ", e tudo continua igual.", 
+      ", afinal, viver é esse caos.", 
+      ", não se preocupe demais.", 
+      ", o importante é sobreviver.", 
+      ", isso também vai passar.", 
+      ", pelo menos até segunda-feira.", 
+      ", ou só ria de desespero.", 
+      ", e espere por dias melhores."
+    ]
+  };
+
+  let versao = null;
+  const conselhoEl = document.getElementById('conselho');
+  const novoBtn = document.getElementById('novoConselhoBtn');
+  const versaoEscolhaEl = document.getElementById('versaoEscolha');
+
+  function sorteiaElemento(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function geraConselho() {
+    const partes = versao === 'livre' ? livres : adultos;
+    return sorteiaElemento(partes.inicio) + " " + 
+           sorteiaElemento(partes.meio) + 
+           sorteiaElemento(partes.fim);
+  }
+
+  function mudaCorFundo() {
+    let cor;
+    do {
+      cor = coresFundo[Math.floor(Math.random() * coresFundo.length)];
+    } while (cor === document.body.style.backgroundColor);
+    document.body.style.backgroundColor = cor;
+  }
+
+  function mostrarConselho() {
+    const conselho = geraConselho();
+    conselhoEl.textContent = conselho;
+    mudaCorFundo();
+  }
+
+  novoBtn.addEventListener('click', mostrarConselho);
+
+  document.getElementById('livreBtn').addEventListener('click', () => {
+    versao = 'livre';
+    versaoEscolhaEl.style.display = 'none';
+    conselhoEl.style.display = 'flex';
+    novoBtn.style.display = 'inline-block';
+    mostrarConselho();
+  });
+
+  document.getElementById('adultaBtn').addEventListener('click', () => {
+    versao = 'adulta';
+    versaoEscolhaEl.style.display = 'none';
+    conselhoEl.style.display = 'flex';
+    novoBtn.style.display = 'inline-block';
+    mostrarConselho();
+  });
+</script>
+
+</body>
+</html>
